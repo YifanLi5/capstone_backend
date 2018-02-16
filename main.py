@@ -4,8 +4,9 @@ from flask import jsonify
 from flask import request
 import folder_asset
 import s3_rest_handler
+import s3_sql_handler
+import timeline_sql_handler
 import platform
-import dyanmodb_handler
 
 app = Flask(__name__)
 app.json_encoder = folder_asset.FolderAssetJSONEncoder
@@ -25,27 +26,29 @@ def base_page_handler():
 
 @app.route('/everything')
 def everything_page_handler():
-    output = s3_rest_handler.retrieve_assets()
+    sql = s3_sql_handler.SlideshowSqlHandler()
+    sql.insert_into_db(open('everything.json'))
+    output = sql.retrieve()
     return jsonify(output)
 
 @app.route('/filter')
 def filter_page_handler():
-    s3_data = s3_rest_handler.retrieve_assets()
-    s3_filtered_data = {}
     last_update_timestamp = request.args.get('last_update', default=0, type=long)
-    for folder in s3_data:
-        asset_list = s3_data[folder]
-        for idx, asset in enumerate(asset_list):
-            if asset.upload_time > last_update_timestamp:
-                s3_filtered_data[folder] = asset_list[idx:]
-                break
-    return jsonify(s3_filtered_data)
+    sql = s3_sql_handler.SlideshowSqlHandler()
+    sql.insert_into_db(open('everything.json'))
+    output = sql.retrieve_after_timestamp(last_update_timestamp)
+    return jsonify(output)
 
 @app.route('/timeline')
 def timeline():
-    return dyanmodb_handler.getTimelineJSON()
+    sql = timeline_sql_handler.TimelineSQLHandler()
+    sql.insert_into_timeline(open('sample_timeline1.json'))
+    output = sql.retrieve_timeline()
+    return jsonify(output)
+
 
 def main():
+
     if platform.system() == "Linux":
         app.run(host='0.0.0.0', port=5000, debug=True)
         # If the system is a windows /!\ Change  /!\ the   /!\ Port

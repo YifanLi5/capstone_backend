@@ -3,6 +3,7 @@ import xml.etree.ElementTree as ET #pip install ElementTree
 import zulu  #pip install zulu
 import folder_asset
 
+#Used to poll s3 for updates and keep the backend synchronized, only the backend is meant to do this.
 
 #XML parsing tag targets:
 # Tag in xml from S3_BUCKET_FIRST_LEVEL to look for folder names
