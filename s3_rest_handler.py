@@ -31,13 +31,13 @@ S3_TEXT_BASE_URL = 'http://psyche-andromeda-text.s3.amazonaws.com/'
 
 def retrieve_assets():
     folder__to__assets__dict = {}
-    folders_list = retrieve_folder_list(S3_ASSET_BUCKET_FIRST_LEVEL)  # get a list of every folder...
+    folders_list = _retrieve_folder_list(S3_ASSET_BUCKET_FIRST_LEVEL)  # get a list of every folder...
     for folder in folders_list:  # for every folder...
-        folder_images_list = retrieve_folder_images_urls(folder)  # get a list of images names...
+        folder_images_list = _retrieve_folder_images_urls(folder)  # get a list of images names...
         folder__to__assets__dict[folder] = folder_images_list
     return folder__to__assets__dict
 
-def retrieve_folder_list(url):
+def _retrieve_folder_list(url):
     folders_list = []
     first_level_request = Request(url)
     try:
@@ -53,7 +53,7 @@ def retrieve_folder_list(url):
         print 'Got an error code:', error
 
 
-def retrieve_folder_images_urls(folder_str):
+def _retrieve_folder_images_urls(folder_str):
     asset_list = []
     text_list_links = []
     images_rest_url = S3_ASSET_FOLDER_PREFIX_FILTERING_URL + folder_str
