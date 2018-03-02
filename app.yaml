@@ -5,5 +5,3 @@ threadsafe: true
 libraries:
 - name: flask
   version: "latest"
-- name: zulu
-  version: "latest"
