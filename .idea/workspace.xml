@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="292ff50f-4210-4747-b209-985d52687cf1" name="Default" comment="added hardcoded testing timeline">
+    <list default="true" id="292ff50f-4210-4747-b209-985d52687cf1" name="Default" comment="">
+      <change beforePath="" afterPath="$PROJECT_DIR$/everything.json" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/s3_sql_handler.py" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/sample_timeline1.json" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/timeline_sql_handler.py" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/main.py" afterPath="$PROJECT_DIR$/main.py" />
-      <change beforePath="$PROJECT_DIR$/s3_rest_handler.py" afterPath="$PROJECT_DIR$/s3_rest_handler.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -18,8 +20,8 @@
       <file leaf-file-name="main.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1160">
-              <caret line="29" column="45" lean-forward="false" selection-start-line="29" selection-start-column="45" selection-end-line="29" selection-end-column="45" />
+            <state relative-caret-position="680">
+              <caret line="17" column="42" lean-forward="true" selection-start-line="17" selection-start-column="42" selection-end-line="17" selection-end-column="42" />
               <folding>
                 <element signature="e#21#63#0" expanded="true" />
               </folding>
@@ -298,7 +300,14 @@
       <option name="project" value="LOCAL" />
       <updated>1518747330991</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="made timeline insertion necessary only if needed">
+      <created>1519982895818</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1519982895818</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TodoView">
@@ -312,8 +321,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-16" y="-16" width="3872" height="2092" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.12896407" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.12896407" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295711" sideWeight="0.4989429" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33238313" sideWeight="0.5064516" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295711" sideWeight="0.49788582" order="1" side_tool="false" content_ui="tabs" />
@@ -386,7 +396,8 @@
     <MESSAGE value="added text entry in output to be used as the description for a gallery asset" />
     <MESSAGE value="added hardcoded testing timeline" />
     <MESSAGE value="/everything and /filter working without relying on s3" />
-    <option name="LAST_COMMIT_MESSAGE" value="/everything and /filter working without relying on s3" />
+    <MESSAGE value="made timeline insertion necessary only if needed" />
+    <option name="LAST_COMMIT_MESSAGE" value="made timeline insertion necessary only if needed" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -856,8 +867,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1160">
-          <caret line="29" column="45" lean-forward="false" selection-start-line="29" selection-start-column="45" selection-end-line="29" selection-end-column="45" />
+        <state relative-caret-position="680">
+          <caret line="17" column="42" lean-forward="true" selection-start-line="17" selection-start-column="42" selection-end-line="17" selection-end-column="42" />
           <folding>
             <element signature="e#21#63#0" expanded="true" />
           </folding>
