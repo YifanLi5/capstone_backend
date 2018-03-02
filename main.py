@@ -50,7 +50,7 @@ def timeline():
 def main():
 
     if platform.system() == "Linux":
-        app.run(host='0.0.0.0', port=5000, debug=True)
+        app.run(host='0.0.0.0', port=8080, debug=True)
         # If the system is a windows /!\ Change  /!\ the   /!\ Port
     elif platform.system() == "Windows":
         app.run(host='0.0.0.0', port=50000, debug=True)
