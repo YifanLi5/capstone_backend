@@ -5,7 +5,7 @@ class SlideshowSqlHandler:
     def __init__(self):
         self.conn = sqlite3.connect('s3.db')
 
-    def insert_s3_if_needed(self, json_file_path):
+    def insert_assets_from_file(self, json_file_path):
         json_file = open(json_file_path)
         json_data = json.load(json_file)
 
@@ -18,7 +18,17 @@ class SlideshowSqlHandler:
             data = cursor.fetchone()
             if data is None:
                 database_insert.append((upload_time, item['asset_url'], item['text']))
-        self.conn.executemany('INSERT INTO slideshow VALUES (?,?,?)', database_insert)
+        self.conn.executemany('INSERT INTO SLIDESHOW VALUES (?,?,?)', database_insert)
+        self.conn.commit()
+
+    def insert_from_folder_asset(self, folder_asset):
+        upload_time = folder_asset.upload_time
+        cursor = self.conn.execute('SELECT upload_time from SLIDESHOW where upload_time=?', (upload_time,))
+        data = cursor.fetchone()
+        if data is None:
+            assert_url = folder_asset.asset_url
+            text = folder_asset.text
+            self.conn.execute("INSERT INTO SLIDESHOW (upload_time, asset_url, text) VALUES (?,?,?)", (upload_time, assert_url, text,))
         self.conn.commit()
 
     def retrieve(self):

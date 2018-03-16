@@ -24,36 +24,43 @@ def base_page_handler():
            "GET [base_url]/timeline \n" \
            "returns the mission timeline"
 
-@app.route('/everything')
+@app.route('/everything', methods = ['GET'])
 def everything_page_handler():
-    sql = s3_sql_handler.SlideshowSqlHandler()
-    sql.insert_s3_if_needed('everything.json')
-    output = sql.retrieve()
+    output = s3_sql_handler.SlideshowSqlHandler().retrieve()
     return jsonify(output)
 
-@app.route('/filter')
+@app.route('/filter', methods = ['GET'])
 def filter_page_handler():
     last_update_timestamp = request.args.get('last_update', default=0, type=long)
-    sql = s3_sql_handler.SlideshowSqlHandler()
-    sql.insert_s3_if_needed('everything.json')
-    output = sql.retrieve_after_timestamp(last_update_timestamp)
+    output = s3_sql_handler.SlideshowSqlHandler().retrieve_after_timestamp(last_update_timestamp)
     return jsonify(output)
 
-@app.route('/timeline')
-def timeline():
-    sql = timeline_sql_handler.TimelineSQLHandler()
-    sql.insert_timeline_if_needed('sample_timeline1.json')
-    output = sql.retrieve_timeline()
+@app.route('/timeline', methods = ['GET'])
+def timeline_handler():
+    output = timeline_sql_handler.TimelineSQLHandler().retrieve_timeline()
     return jsonify(output)
 
+@app.route('/upload', methods = ['POST'])
+def upload_handler():
+    post_data = request.get_json()
+    new_asset = folder_asset.FolderAsset(post_data['asset_url'], post_data['upload_time'], post_data['text'])
+    s3_sql_handler.SlideshowSqlHandler().insert_from_folder_asset(new_asset)
+    return "200 success" \
+           "\nasset_url: " + post_data['asset_url'] + \
+           "\nupload_time: " + str(post_data['upload_time']) + \
+           "\ntext: " + post_data['text']
+
+def setup():
+   timeline_sql_handler.TimelineSQLHandler().insert_assets_from_file('sample_timeline1.json')
+   s3_sql_handler.SlideshowSqlHandler().insert_assets_from_file('everything.json')
 
 def main():
-
+    setup()
     if platform.system() == "Linux":
         app.run(host='0.0.0.0', port=8080, debug=True)
-        # If the system is a windows /!\ Change  /!\ the   /!\ Port
     elif platform.system() == "Windows":
         app.run(host='0.0.0.0', port=50000, debug=True)
+
 
 
 

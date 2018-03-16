@@ -81,7 +81,9 @@ def _retrieve_folder_images_urls(folder_str):
             if child.tag == CONTENTS_XML_TAG_TARGET:
                 if skip_folder_flag: #do not execute on first loop, second loop is when folder contents start
                     unix_timestamp = long(zulu.parse(child[1].text).timestamp())
-                    txt = urlopen(S3_TEXT_BASE_URL + text_list_links[idx]).read()
+                    txt = "No Description"
+                    if idx < len(text_list_links):
+                        txt = urlopen(S3_TEXT_BASE_URL + text_list_links[idx]).read()
                     asset = folder_asset.FolderAsset(S3_ASSET_BASE_URL + child[0].text, unix_timestamp, txt)
                     asset_list.append(asset)
                 skip_folder_flag = True

@@ -5,7 +5,7 @@ class TimelineSQLHandler:
     def __init__(self):
         self.conn = sqlite3.connect('timeline.db')
 
-    def insert_timeline_if_needed(self, json_file_path):
+    def insert_assets_from_file(self, json_file_path):
         json_file = open(json_file_path)
         json_data = json.load(json_file)
         timelineArr = json_data["timeline"]
