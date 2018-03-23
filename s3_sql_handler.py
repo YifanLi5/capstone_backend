@@ -25,11 +25,15 @@ class SlideshowSqlHandler:
         upload_time = folder_asset.upload_time
         cursor = self.conn.execute('SELECT upload_time from SLIDESHOW where upload_time=?', (upload_time,))
         data = cursor.fetchone()
-        if data is None:
+
+        inserted = data is None
+        if inserted:
             assert_url = folder_asset.asset_url
             text = folder_asset.text
             self.conn.execute("INSERT INTO SLIDESHOW (upload_time, asset_url, text) VALUES (?,?,?)", (upload_time, assert_url, text,))
-        self.conn.commit()
+            self.conn.commit()
+
+        return inserted
 
     def retrieve(self):
         json_data = {}
