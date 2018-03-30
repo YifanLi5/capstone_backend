@@ -5,6 +5,7 @@ class SlideshowSqlHandler:
     def __init__(self):
         self.conn = sqlite3.connect('s3.db')
 
+    #for inserting into db from a json file
     def insert_assets_from_file(self, json_file_path):
         json_file = open(json_file_path)
         json_data = json.load(json_file)
@@ -21,7 +22,10 @@ class SlideshowSqlHandler:
         self.conn.executemany('INSERT INTO SLIDESHOW VALUES (?,?,?)', database_insert)
         self.conn.commit()
 
+    #insert by passing in folder_asset object
     def insert_from_folder_asset(self, folder_asset):
+        self.conn.execute(
+            'CREATE TABLE IF NOT EXISTS SLIDESHOW (upload_time INT PRIMARY KEY NOT NULL, asset_url TEXT, text TEXT)')
         upload_time = folder_asset.upload_time
         cursor = self.conn.execute('SELECT upload_time from SLIDESHOW where upload_time=?', (upload_time,))
         data = cursor.fetchone()
@@ -35,7 +39,7 @@ class SlideshowSqlHandler:
 
         return inserted
 
-    def retrieve(self):
+    def retrieve_all(self):
         json_data = {}
         slideshow = []
         cursor = self.conn.execute('SELECT upload_time, asset_url, text from SLIDESHOW')

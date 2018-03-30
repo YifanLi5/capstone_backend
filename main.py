@@ -4,6 +4,7 @@ from flask import Flask, json  # pip install flask
 from flask import jsonify
 from flask import request
 import folder_asset
+import timeline_asset
 import s3_sql_handler
 import s3_rest_handler
 import timeline_sql_handler
@@ -13,7 +14,10 @@ app = Flask(__name__)
 app.json_encoder = folder_asset.FolderAssetJSONEncoder
 
 s3_slideshow_url = 'http://psyche-andromeda.s3.amazonaws.com/example_slideshow/'
-upload_target_folder = 'example_slideshow/'
+general_upload_folder = 'example_slideshow/'
+s3_timeline_url = 'http://psyche-andromeda.s3.amazonaws.com/timeline/'
+timeline_upload_folder = 'timeline/'
+
 
 @app.route('/')
 def base_page_handler():
@@ -30,7 +34,7 @@ def base_page_handler():
 
 @app.route('/everything', methods = ['GET'])
 def everything_page_handler():
-    output = s3_sql_handler.SlideshowSqlHandler().retrieve()
+    output = s3_sql_handler.SlideshowSqlHandler().retrieve_all()
     return jsonify(output)
 
 @app.route('/filter', methods = ['GET'])
@@ -58,22 +62,61 @@ def upload_handler():
             image_data = request.files.get('file', '')
             if image_data:
                 s3 = boto3.resource('s3')
-                print(upload_target_folder + json_data['image_name'])
-                s3.Bucket('psyche-andromeda').put_object(Key=upload_target_folder + json_data['image_name'], Body=image_data)
+                print("uploading to: " + general_upload_folder + json_data['image_name'])
+                s3.Bucket('psyche-andromeda').put_object(Key=general_upload_folder + json_data['image_name'], Body=image_data)
 
                 return "200 success" \
                        "\nasset_url: " + url + \
                        "\nupload_time: " + str(json_data['upload_time']) + \
                        "\ntext: " + json_data['text']
+    return "TODO: other error codes"
 
+@app.route('/timeline_update', methods = ['POST'])
+def timeline_update_handler():
+    raw_json_data = request.form.get('entry')
+    if raw_json_data:
+        json_data = json.loads(raw_json_data)
+        dateTime = json_data['dateTime']
+        name = json_data['name']
+        description = json_data['description']
+        media = json_data['media']
+
+        filetypes = []
+        asset_url = []
+        for item in media:
+            temp = item['filename']
+            if temp.endswith('.jpg') or temp.endswith('.jpeg') or temp.endswith('png'):
+                idx = temp.rfind('.')
+                filetypes.append(temp[idx:])
+                asset_url.append(s3_timeline_url + temp)
+            else:
+                return "400 client error" \
+                        "\nfilename " + item + " not a jpeg, jpg, or png"
+        asset = timeline_asset.TimelineAsset(dateTime, name, description, filetypes, asset_url)
+        is_new = timeline_sql_handler.TimelineSQLHandler().insert_from_timeline_obj(asset)
+        if True:
+            for item in media:
+                temp = item['filename']
+                image_data = request.files.get(temp, '')
+                if image_data:
+                    s3 = boto3.resource('s3')
+                    print("uploading to: " + timeline_upload_folder + temp)
+                    s3.Bucket('psyche-andromeda').put_object(Key=timeline_upload_folder + temp,
+                                                             Body=image_data)
+            return "200 success" \
+                   "\ndateTime: " + dateTime + \
+                   "\nname: " + temp + \
+                   "\ndescription: " + description + \
+                   "\nmedia_urls: " + ''.join(asset_url)
+
+    return "TODO: other error codes"
 
 def setup():
-   timeline_sql_handler.TimelineSQLHandler().insert_assets_from_file('sample_timeline1.json')
-   s3_sql_handler.SlideshowSqlHandler().insert_assets_from_file('everything.json')
+    test_asset = timeline_asset.TimelineAsset("datetime", "name", "desc", [".png", ".jpeg"], ["link1", "link2"])
+    timeline_sql_handler.TimelineSQLHandler().insert_from_timeline_obj(test_asset)
 
 def main():
-
-    setup()
+    #setup()
     if platform.system() == "Linux":
         app.run(host='0.0.0.0', port=8080, debug=True)
     elif platform.system() == "Windows":

@@ -1,11 +1,12 @@
 import sqlite3
 import json
+import timeline_asset
 
 class TimelineSQLHandler:
     def __init__(self):
         self.conn = sqlite3.connect('timeline.db')
 
-    def insert_assets_from_file(self, json_file_path):
+    def insert_from_file(self, json_file_path):
         json_file = open(json_file_path)
         json_data = json.load(json_file)
         timelineArr = json_data["timeline"]
@@ -23,6 +24,22 @@ class TimelineSQLHandler:
                 self.conn.execute('INSERT INTO TIMELINE (dateTime, name, description, media) VALUES (?,?,?,?)',
                              (dateTime, name, description, media))
         self.conn.commit()
+
+    def insert_from_timeline_obj(self, timeline):
+        self.conn.execute(
+            'CREATE TABLE IF NOT EXISTS TIMELINE (dateTime TEXT PRIMARY KEY NOT NULL, name TEXT, description TEXT, media TEXT)')
+        cursor = self.conn.execute('SELECT dateTime from TIMELINE where dateTime=?', (timeline.dateTime,))
+        data = cursor.fetchone()
+
+
+        if data is None:
+            self.conn.execute('INSERT INTO TIMELINE (dateTime, name, description, media) VALUES (?,?,?,?)',
+                              (timeline.dateTime, timeline.name, timeline.description
+                               , json.dumps(timeline.media, cls=timeline_asset.MediaJSONEncoder)))
+            self.conn.commit()
+            return True
+
+        return False
 
 
     def retrieve_timeline(self):
