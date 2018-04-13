@@ -21,16 +21,32 @@ timeline_upload_folder = 'timeline/'
 
 @app.route('/')
 def base_page_handler():
-    return "api:" \
-           "\n" \
-           "GET [base_url]/everything\n" \
-           "returns every asset in s3" \
-           "\n\n" \
-           "GET [base_url]/filter?=[unix_timestamp]\n" \
-           "returns every asset uploaded after [unix_timestamp] argument" \
-           "\n\n" \
-           "GET [base_url]/timeline \n" \
-           "returns the mission timeline"
+    return  "api:" \
+            "\n" \
+            "GET /everything\n" \
+            "returns every asset in s3" \
+            "\n\n" \
+            "GET /filter?=[unix_timestamp]\n" \
+            "returns every asset uploaded after [unix_timestamp] argument" \
+            "\n\n" \
+            "GET /timeline \n" \
+            "returns the mission timeline" \
+            "\n\n" \
+            "POST /upload \n" \
+            "send a multipart form-data request with [key]::[values]\n" \
+            "ex: entry is a key, the value is json str of relevant information to pass in\n" \
+            "entry::(see /upload_json.txt)\n" \
+            "file::[image file].jpg or .jpeg or .png" \
+            "\n\n" \
+            "POST /timeline_update \n" \
+            "send a multipart form-data request with [key]::[values]\n" \
+            "entry::(see /timeline_update_json.txt)\n" \
+            "file0::[image file].jpg or .jpeg or .png\n" \
+            "file1::[image file].jpg or .jpeg or .png\n" \
+            "file2::[image file].jpg or .jpeg or .png\n" \
+            "submit as many files as needed for the specified timeline entry, ensure that media array in the json sent under the \"entry\"\n" \
+            "matches how many files you are submitting."
+
 
 @app.route('/everything', methods = ['GET'])
 def everything_page_handler():
