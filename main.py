@@ -128,11 +128,10 @@ def timeline_update_handler():
     return "TODO: other error codes"
 
 def setup():
-    test_asset = timeline_asset.TimelineAsset("datetime", "name", "desc", [".png", ".jpeg"], ["link1", "link2"])
-    timeline_sql_handler.TimelineSQLHandler().insert_from_timeline_obj(test_asset)
+    timeline_sql_handler.TimelineSQLHandler().insert_from_file('sample_timeline_output.json')
 
 def main():
-    #setup()
+    setup()
     if platform.system() == "Linux":
         app.run(host='0.0.0.0', port=8080, debug=True)
     elif platform.system() == "Windows":
