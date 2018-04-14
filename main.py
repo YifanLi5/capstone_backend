@@ -105,7 +105,7 @@ def timeline_update_handler():
         asset_url = []
         for item in media:
             temp = item['filename']
-            if temp.endswith('.jpg') or temp.endswith('.jpeg') or temp.endswith('png'):
+            if temp.endswith('.jpg') or temp.endswith('.jpeg') or temp.endswith('.png'):
                 idx = temp.rfind('.')
                 filetypes.append(temp[idx:])
                 asset_url.append(s3_timeline_url + temp)
@@ -121,19 +121,26 @@ def timeline_update_handler():
                 if image_data:
                     s3 = boto3.resource('s3')
                     print("uploading to: " + timeline_upload_folder + temp)
-                    s3.Bucket('psyche-andromeda').put_object(Key=timeline_upload_folder + temp,
+                    object = s3.Bucket('psyche-andromeda').put_object(Key=timeline_upload_folder + temp,
                                                              Body=image_data)
-            return "200 success" \
-                   "\ndateTime: " + dateTime + \
-                   "\nname: " + temp + \
-                   "\ndescription: " + description + \
-                   "\nmedia_urls: " + ''.join(asset_url)
+                    objecacl = object.Acl()
+                    objecacl.put(ACL='public-read')
+
+                    return "200 success" \
+                           "\ndateTime: " + dateTime + \
+                           "\nname: " + temp + \
+                           "\ndescription: " + description + \
+                           "\nmedia_urls: " + ''.join(asset_url)
+                else:
+                    "400, image not available"
+        else:
+            "is not new"
 
     return "400 client error, no form-data key called entry"
 
 def setup():
-    timeline_sql_handler.TimelineSQLHandler().insert_from_file('sample_timeline_output.json')
-    s3_sql_handler.SlideshowSqlHandler().insert_assets_from_file('slideshow.json')
+    timeline_sql_handler.TimelineSQLHandler().insert_from_file('initial_timeline_input.json')
+    s3_sql_handler.SlideshowSqlHandler().insert_assets_from_file('initial_slideshow_input.json')
 
 def main():
     setup()

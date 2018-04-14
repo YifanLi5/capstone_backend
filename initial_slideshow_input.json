@@ -1,5 +1,5 @@
 {
-    "example_slideshow": [
+    "slideshow": [
         {
             "asset_url": "http://psyche-andromeda.s3.amazonaws.com/example_slideshow/asteroid.jpg",
             "text": "This is an image of the psyche asteroid. And this is a test message.",

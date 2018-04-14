@@ -11,7 +11,7 @@ class SlideshowSqlHandler:
         json_data = json.load(json_file)
 
         self.conn.execute('CREATE TABLE IF NOT EXISTS SLIDESHOW (upload_time INT PRIMARY KEY NOT NULL, asset_url TEXT, text TEXT, category TEXT)')
-        slide_show_list = json_data['example_slideshow']
+        slide_show_list = json_data['slideshow']
         database_insert = []
         for item in slide_show_list:
             upload_time = item['upload_time']
@@ -72,3 +72,4 @@ class SlideshowSqlHandler:
 
         json_data['slideshow'] = slideshow
         return json_data
+
