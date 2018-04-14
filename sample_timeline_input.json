@@ -1,0 +1,10 @@
+{
+  "dateTime" : "2018-02-04T05:42:03+00:00",
+  "name" : "entry1",
+  "description" : "lorem ipsum",
+  "media" : [
+    {
+      "filename" : "magikarp.jpeg"
+    }
+  ]
+}
