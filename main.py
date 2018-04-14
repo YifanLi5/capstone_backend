@@ -113,28 +113,27 @@ def timeline_update_handler():
                 return "400 client error" \
                         "\nfilename " + item + " not a jpeg, jpg, or png"
         asset = timeline_asset.TimelineAsset(dateTime, name, description, filetypes, asset_url)
-        is_new = timeline_sql_handler.TimelineSQLHandler().insert_from_timeline_obj(asset)
-        if is_new:
-            for item in media:
-                temp = item['filename']
-                image_data = request.files.get(temp, '')
-                if image_data:
-                    s3 = boto3.resource('s3')
-                    print("uploading to: " + timeline_upload_folder + temp)
-                    object = s3.Bucket('psyche-andromeda').put_object(Key=timeline_upload_folder + temp,
-                                                             Body=image_data)
-                    objecacl = object.Acl()
-                    objecacl.put(ACL='public-read')
 
-                    return "200 success" \
-                           "\ndateTime: " + dateTime + \
-                           "\nname: " + temp + \
-                           "\ndescription: " + description + \
-                           "\nmedia_urls: " + ''.join(asset_url)
-                else:
-                    "400, image not available"
-        else:
-            "is not new"
+        for item in media:
+            temp = item['filename']
+            image_data = request.files.get(temp, '')
+            if image_data:
+                s3 = boto3.resource('s3')
+                print("uploading to: " + timeline_upload_folder + temp)
+                object = s3.Bucket('psyche-andromeda').put_object(Key=timeline_upload_folder + temp,
+                                                         Body=image_data)
+                objecacl = object.Acl()
+                objecacl.put(ACL='public-read')
+                timeline_sql_handler.TimelineSQLHandler().insert_from_timeline_obj(asset)
+
+                return "200 success" \
+                       "\ndateTime: " + dateTime + \
+                       "\nname: " + temp + \
+                       "\ndescription: " + description + \
+                       "\nmedia_urls: " + ''.join(asset_url)
+            else:
+                "400, image not available"
+
 
     return "400 client error, no form-data key called entry"
 
