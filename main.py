@@ -85,7 +85,11 @@ def upload_handler():
                        "\nasset_url: " + url + \
                        "\nupload_time: " + str(json_data['upload_time']) + \
                        "\ntext: " + json_data['text']
-    return "TODO: other error codes"
+            return "400, no image data found"
+
+        return "This entry already exists in the server"
+
+    return "400, no form-data key called entry"
 
 @app.route('/timeline_update', methods = ['POST'])
 def timeline_update_handler():
@@ -110,7 +114,7 @@ def timeline_update_handler():
                         "\nfilename " + item + " not a jpeg, jpg, or png"
         asset = timeline_asset.TimelineAsset(dateTime, name, description, filetypes, asset_url)
         is_new = timeline_sql_handler.TimelineSQLHandler().insert_from_timeline_obj(asset)
-        if True:
+        if is_new:
             for item in media:
                 temp = item['filename']
                 image_data = request.files.get(temp, '')
@@ -125,10 +129,11 @@ def timeline_update_handler():
                    "\ndescription: " + description + \
                    "\nmedia_urls: " + ''.join(asset_url)
 
-    return "TODO: other error codes"
+    return "400 client error, no form-data key called entry"
 
 def setup():
     timeline_sql_handler.TimelineSQLHandler().insert_from_file('sample_timeline_output.json')
+    s3_sql_handler.SlideshowSqlHandler().insert_assets_from_file('slideshow.json')
 
 def main():
     setup()

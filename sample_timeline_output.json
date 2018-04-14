@@ -19,6 +19,14 @@
         {
         "type" : "filetype",
         "link" : "link"
+        },
+        {
+        "type" : "filetype",
+        "link" : "link"
+        },
+        {
+        "type" : "filetype",
+        "link" : "link"
         }
       ]
     }

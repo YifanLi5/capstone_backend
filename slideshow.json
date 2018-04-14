@@ -3,17 +3,20 @@
         {
             "asset_url": "http://psyche-andromeda.s3.amazonaws.com/example_slideshow/asteroid.jpg",
             "text": "This is an image of the psyche asteroid. And this is a test message.",
-            "upload_time": 1000
+            "upload_time": 1000,
+            "category" : "test"
         },
         {
             "asset_url": "http://psyche-andromeda.s3.amazonaws.com/example_slideshow/bitcoin.jpg",
             "text": "This is an image of bitcoins being sucked into a black hole. And this is a test message. ",
-            "upload_time": 5000
+            "upload_time": 5000,
+            "category" : "test"
         },
         {
             "asset_url": "http://psyche-andromeda.s3.amazonaws.com/example_slideshow/album.jpg",
             "text": "This is an image of a record album presumably named \"Andromeda\". There are also 3 suns with faces on them, they are positioned to the left, center and right.\r\nThe ones on the left and right are only partialy shown. And this is a test message. ",
-            "upload_time": 10000
+            "upload_time": 10000,
+            "category" : "test"
         }
     ]
 }
